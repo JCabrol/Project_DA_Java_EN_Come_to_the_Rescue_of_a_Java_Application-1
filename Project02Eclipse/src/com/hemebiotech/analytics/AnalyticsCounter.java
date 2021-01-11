@@ -23,22 +23,44 @@ public class AnalyticsCounter {
 			} else if (action == 1)        //If action equals 1 the user select a file to be read.
 			//Then the symptoms found in the file are put in the result file.
 			{
-				ChooseFileToRead choose = new ChooseFileToRead();
+				FileChooser choose = new FileChooser();
 				String path = choose.returnPath();
 
 
 				ReadSymptomDataFromFile readSymptomData = new ReadSymptomDataFromFile(path);
 				TreeMap<String, Integer> symptoms = readSymptomData.getSymptoms();//Read the data in the specified file and put it in a TreeMap,
 				//in the alphabetical order, counting the occurrences of each symptom.
-
-				WriteSymptomsInFile allSymptoms = new WriteSymptomsInFile("result.out");
-				allSymptoms.writeInFile(symptoms);//write the symptoms from the TreeMap in a new file called result.out, one per line.
-				action = 0;
+				int secondaryAction =0;
+				while(secondaryAction==0)
+					{
+					secondaryAction = myMenu.secondaryMenu(); 	/*the user choose if he wants to put new symptoms
+					in a new file or to add it in an existing file.*/
+					}
+				if (secondaryAction==1)
+				{
+					System.out.println("You want to put symptoms in a new file.");
+					WriteSymptomsInFile allSymptoms = new WriteSymptomsInFile("");
+					allSymptoms.writeInNewFile(symptoms);//write the symptoms from the TreeMap in a new file called result.out, one per line.
+					action = 0;
+				}
+				else if (secondaryAction==2)
+				{
+					System.out.println("You want to add symptoms in an existing file.");
+					WriteSymptomsInFile allSymptoms = new WriteSymptomsInFile("");
+					allSymptoms.writeInExistingFile(symptoms);//write the symptoms from the TreeMap in a new file called result.out, one per line.
+					action = 0;
+				}
+				else
+				{
+					System.out.println("A problem occurred, please try another time."+"\n");
+				}
 			} else if (action == 2)    //If action equals 2, the result file is opened.
 			//Then the menu is displayed again.
 			{
 				try {
-					Desktop.getDesktop().open(new java.io.File("result.out"));
+					FileChooser chooseFile = new FileChooser();
+					String pathFileResult = chooseFile.returnPath();
+					Desktop.getDesktop().open(new java.io.File(pathFileResult));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

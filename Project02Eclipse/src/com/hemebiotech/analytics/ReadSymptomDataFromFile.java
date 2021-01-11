@@ -25,6 +25,9 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 		this.filepath = filepath;
 	}
 
+	public String getFilepath() {
+		return filepath;
+	}
 
 	@Override
 
@@ -59,5 +62,38 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 		return result;
 	}
 
+	public TreeMap <String, Integer> addSymptomsInResults(TreeMap<String,Integer> result) {
+//this method is used to add symptoms from a result file to a result Treemap
+		if (filepath != null) {
+			try {
 
+				BufferedReader reader = new BufferedReader (new FileReader(filepath));
+				String line = reader.readLine();
+
+
+				while (line != null) {						//Verify it's not the end of the file.
+					String[] symptomAndNumber = line.split("="); //separate symptom and number of occurrences in the line
+					String symptom = symptomAndNumber[0];
+					int numberOccurrence = Integer.parseInt(symptomAndNumber[1]);
+					String lowerCaseSymptom = symptom.toLowerCase();//Put all symptoms in lower case, to be sure there is not the same two times.
+					if (result.containsKey(lowerCaseSymptom))
+					{
+						result.replace(lowerCaseSymptom, result.get(lowerCaseSymptom)+numberOccurrence);
+						//If symptom already exists, add number of occurrences for this symptom in the result.
+					}
+					else if(!(lowerCaseSymptom.equals("")))//Verify the line is not empty.
+					{
+						result.put(lowerCaseSymptom,1);//If symptom doesn't exist, create a new symptom with one occurrence in the result.
+					}
+					line = reader.readLine();//read the following line.
+				}
+				reader.close();
+			} catch (IOException e) {
+				System.out.println("The specified file cannot be read. Please verify its existence and its location.");
+			}
+		}
+
+
+		return result;
+	}
 }

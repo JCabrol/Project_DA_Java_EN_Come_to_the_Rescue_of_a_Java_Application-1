@@ -18,9 +18,33 @@ public class Menu {
         }
         catch (Exception e)
         {
+            System.out.println("You didn't choose an available action. Please enter 1, 2 or 3, then press enter.");
             result = 0;
         }
         return result;
     }
 
+    public int secondaryMenu()
+    {
+        int actionChosen;
+        Scanner sc2 = new Scanner(System.in);
+        System.out.println("Choose where you want to put the symptoms read:"+
+                "\n"+"1- Create a new file."+
+                "\n"+"2- Add symptoms to an existing file."+"\n");
+        try
+        {
+            actionChosen = sc2.nextInt();
+            if (!((actionChosen==1)||(actionChosen==2)))
+            {
+                System.out.println("You didn't choose an available action. Please enter 1 or 2, then press enter.");
+                actionChosen = 0;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("You didn't choose an available action. Please enter 1 or 2, then press enter.");
+            actionChosen = 0;
+        }
+        return actionChosen;
+    }
 }
